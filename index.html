@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Physics Practice Test</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#faf9f5; --surface:#ffffff; --surface-alt:#f3f1ec;
+  --text:#1f1e1c; --text-2:#5f5e5a; --text-3:#8a8880;
+  --line:#e2dfd7; --line-2:#cfcbc0;
+  --accent:#185fa5; --accent-bg:#e6f1fb; --accent-line:#85b7eb;
+  --ok:#3b6d11; --ok-bg:#eaf3de; --ok-line:#97c459;
+  --no:#a32d2d; --no-bg:#fcebeb; --no-line:#f09595;
+  --warn:#854f0b; --warn-bg:#faeeda; --warn-line:#efc27a;
+  --charge:#d85a30;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1a1915; --surface:#242320; --surface-alt:#2e2d28;
+    --text:#edebe4; --text-2:#b4b2a9; --text-3:#8a8880;
+    --line:#3a3833; --line-2:#4a4842;
+    --accent:#85b7eb; --accent-bg:#0c3254; --accent-line:#185fa5;
+    --ok:#97c459; --ok-bg:#1f3310; --ok-line:#3b6d11;
+    --no:#f09595; --no-bg:#3d1515; --no-line:#a32d2d;
+    --warn:#efc27a; --warn-bg:#3a2a10; --warn-line:#854f0b;
+    --charge:#f0997b;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+header h1{font-size:20px;font-weight:600;margin:0}
+.sub{color:var(--text-2);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 10px;font-weight:600}
+h3{font-size:16px;margin:16px 0 8px;font-weight:600}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--text);padding:10px 16px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme: dark){button.primary{color:#0b1e33}}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.link{border:none;background:none;color:var(--text-2);padding:6px;font-size:14px;text-decoration:underline}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hidden{display:none !important}
+ol.steps{padding-left:20px;margin:8px 0}
+ol.steps li{margin-bottom:6px}
+.qtext{font-size:16px}
+.qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.marks{font-size:13px;color:var(--text-2);white-space:nowrap}
+.figure{display:flex;justify-content:center;margin:14px 0}
+.figure svg{width:100%;max-width:420px;height:auto}
+.task{background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:8px;padding:12px 14px;margin-top:12px}
+.timer{font-variant-numeric:tabular-nums;font-size:22px;font-weight:600;padding:6px 12px;border-radius:8px;
+  background:var(--surface-alt);border:1px solid var(--line)}
+.timer.low{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn)}
+.timer.up{background:var(--no-bg);border-color:var(--no-line);color:var(--no)}
+.banner{border-radius:8px;padding:10px 14px;margin:10px 0;font-size:15px}
+.banner.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line)}
+.banner.err{background:var(--no-bg);color:var(--no);border:1px solid var(--no-line)}
+.banner.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-line)}
+.drop{border:2px dashed var(--line-2);border-radius:var(--r);padding:22px;text-align:center;color:var(--text-2)}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:12px}
+.thumb{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface-alt)}
+.thumb img{display:block;width:100%;height:130px;object-fit:cover}
+.thumb button{position:absolute;top:4px;right:4px;padding:2px 8px;font-size:13px}
+label.f{display:block;font-size:14px;color:var(--text-2);margin:12px 0 4px}
+input[type=text],input[type=password],input[type=email],input[type=number],select{
+  width:100%;font:inherit;padding:9px 11px;border-radius:8px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--text)}
+.spinner{width:36px;height:36px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--accent);
+  animation:spin 1s linear infinite;margin:10px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.score{display:flex;align-items:center;gap:16px}
+.score .big{font-size:40px;font-weight:700;line-height:1}
+.crit{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.crit:first-child{border-top:none}
+.tick{flex:0 0 28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+.tick.y{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-line)}
+.tick.n{background:var(--no-bg);color:var(--no);border:1px solid var(--no-line)}
+.crit .what{font-weight:600}
+.crit .why{color:var(--text-2);font-size:15px}
+details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-top:10px;background:var(--surface-alt)}
+summary{cursor:pointer;font-weight:600}
+pre.read{white-space:pre-wrap;font-family:inherit;margin:8px 0 0;font-size:15px}
+footer{text-align:center;color:var(--text-3);font-size:13px;margin-top:30px}
+.dialog{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.dialog .card{max-width:520px;width:100%;max-height:90vh;overflow:auto}
+.small{font-size:13px;color:var(--text-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Physics practice test</h1>
+      <div class="sub" id="testTitle"></div>
+    </div>
+    <div id="timerBox" class="timer hidden">--:--</div>
+  </header>
+
+  <!-- 1. Start -->
+  <section id="s-start">
+    <div class="card">
+      <h2>Before you start</h2>
+      <ol class="steps">
+        <li>Have paper, a pen and a calculator ready. Close your notes.</li>
+        <li>When you press <b>Start</b>, the questions and a timer appear.</li>
+        <li>Write all your working on paper. Show every step — marks are given for method, not just the answer.</li>
+        <li>When you finish (or time runs out), take clear photos of your pages and upload them.</li>
+        <li>Your work is then marked and you get feedback straight away.</li>
+      </ol>
+      <div id="startInfo" class="sub"></div>
+      <div id="keyMissing" class="banner warn hidden">The marker isn't set up on this device yet. Ask your tutor to open <b>Tutor settings</b> below.</div>
+      <div class="row" style="margin-top:14px">
+        <button class="primary" id="btnStart">Start the test</button>
+      </div>
+    </div>
+    <div id="lastResult" class="card hidden"></div>
+  </section>
+
+  <!-- 2. Questions -->
+  <section id="s-test" class="hidden">
+    <div id="questions"></div>
+    <div class="card">
+      <div class="row">
+        <button class="primary" id="btnDone">I've finished — upload my working</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Upload -->
+  <section id="s-upload" class="hidden">
+    <div id="timeUp" class="banner warn hidden">Time is up. Pens down, then photograph your working.</div>
+    <div class="card">
+      <h2>Upload your working</h2>
+      <p class="sub" style="margin-top:0">Take one photo per page. Lay the page flat, in good light, with the whole page in the frame. Write question numbers clearly.</p>
+      <div class="drop">
+        <div class="row" style="justify-content:center">
+          <button id="btnCamera">Take a photo</button>
+          <button id="btnFiles">Choose from gallery</button>
+        </div>
+        <input type="file" id="inCamera" accept="image/*" capture="environment" class="hidden">
+        <input type="file" id="inFiles" accept="image/*" multiple class="hidden">
+        <div class="small" style="margin-top:8px">Up to 6 pages</div>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+      <div id="uploadErr" class="banner err hidden"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="primary" id="btnMark" disabled>Submit for marking</button>
+        <button id="btnBackToQ">Look at the questions again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Marking -->
+  <section id="s-marking" class="hidden">
+    <div class="card" style="text-align:center">
+      <div class="spinner"></div>
+      <h2 style="margin-top:10px">Marking your working…</h2>
+      <p class="sub">This usually takes 20–40 seconds. Keep this page open.</p>
+    </div>
+  </section>
+
+  <!-- 5. Results -->
+  <section id="s-results" class="hidden">
+    <div id="results"></div>
+    <div class="card">
+      <div class="row">
+        <button class="primary" id="btnSend">Send results to my tutor</button>
+        <button id="btnCopy">Copy results</button>
+        <button id="btnRestart">Start again</button>
+      </div>
+      <div id="sendNote" class="small" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <div class="row" style="justify-content:center">
+    <button class="link" id="btnSettings">Tutor settings</button>
+  </div>
+  <footer>A test created by Odireleng for Mokgadi</footer>
+</div>
+
+<!-- Settings dialog -->
+<div class="dialog hidden" id="dlg">
+  <div class="card">
+    <h2>Tutor settings</h2>
+    <p class="sub" style="margin-top:0">Saved on this device only. The key is never written into the website file.</p>
+    <label class="f" for="setKey">Anthropic API key</label>
+    <input type="password" id="setKey" placeholder="sk-ant-…" autocomplete="off">
+    <label class="f" for="setModel">Marking model</label>
+    <select id="setModel">
+      <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (recommended — good and cheap)</option>
+      <option value="claude-opus-5-5">Claude Opus 5.5 (strongest, costs more)</option>
+    </select>
+    <label class="f" for="setEmail">Tutor email (results are sent here)</label>
+    <input type="email" id="setEmail" placeholder="you@example.com">
+    <label class="f" for="setName">Student name</label>
+    <input type="text" id="setName" placeholder="Mokgadi">
+    <div class="row" style="margin-top:16px">
+      <button class="primary" id="btnSaveSet">Save</button>
+      <button id="btnTestKey">Test the key</button>
+      <button id="btnCloseSet">Close</button>
+    </div>
+    <div id="setMsg" class="small" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   TEST CONTENT — edit this block to make a new test.
+   Each criterion is one mark the marker can award.
+   ========================================================= */
+const TEST = {
+  id: "efield-two-charges-01",
+  title: "Electric field from two point charges",
+  minutes: 12,
+  questions: [
+    {
+      number: "2",
+      marks: 4,
+      text: "Two particles, each carrying charge $+q$, are held at rest on the $y$ axis: particle 1 at $y=+a$ and particle 2 at $y=-a$. The point $P$ lies on the $x$ axis a distance $x$ from the origin, as shown. Write your answers in terms of $k$, $q$, $a$ and $x$.",
+      figure: "twoCharges",
+      task: "Show that the magnitude of the resultant electric field at $P$ is $$E=\\frac{2kqx}{(x^2+a^2)^{3/2}}.$$",
+      criteria: [
+        { id:"c1", text:"Distance from each charge to P", detail:"Uses Pythagoras: $r=\\sqrt{x^2+a^2}$ (or $r^2=x^2+a^2$)." },
+        { id:"c2", text:"Field from one charge", detail:"$E_1=E_2=\\dfrac{kq}{r^2}=\\dfrac{kq}{x^2+a^2}$, pointing away from each positive charge." },
+        { id:"c3", text:"Symmetry: y-parts cancel, x-parts add", detail:"States or shows (sketch or words) that the vertical components cancel and only the horizontal components remain." },
+        { id:"c4", text:"Correct x-component and final result", detail:"Uses $\\cos\\theta=\\dfrac{x}{\\sqrt{x^2+a^2}}$, so $E=2\\cdot\\dfrac{kq}{x^2+a^2}\\cdot\\dfrac{x}{\\sqrt{x^2+a^2}}=\\dfrac{2kqx}{(x^2+a^2)^{3/2}}$." }
+      ],
+      commonErrors: [
+        "Using r = x or r = a instead of sqrt(x^2 + a^2).",
+        "Adding the two magnitudes directly to get 2kq/(x^2+a^2) without resolving into components.",
+        "Saying the x-components cancel instead of the y-components.",
+        "Using sin(theta) = a/r for the x-component instead of cos(theta) = x/r.",
+        "Dropping the factor of 2 from the two charges.",
+        "Writing the given answer at the end without working that actually leads to it (a 'show that' question gives the answer, so marks are only for the working)."
+      ],
+      modelSolution: [
+        "Each charge is a distance $r=\\sqrt{x^2+a^2}$ from $P$.",
+        "Each produces a field of size $E_1=E_2=\\dfrac{kq}{x^2+a^2}$, pointing away from the charge.",
+        "By symmetry the $y$-components (one up, one down) cancel. The $x$-components both point in the $+x$ direction, so they add.",
+        "Each $x$-component is $E_1\\cos\\theta$ with $\\cos\\theta=\\dfrac{x}{\\sqrt{x^2+a^2}}$.",
+        "$E=2\\cdot\\dfrac{kq}{x^2+a^2}\\cdot\\dfrac{x}{\\sqrt{x^2+a^2}}=\\dfrac{2kqx}{(x^2+a^2)^{3/2}}$"
+      ]
+    }
+  ]
+};
+
+/* ---------- figures ---------- */
+const FIGURES = {
+  twoCharges: `
+<svg viewBox="0 0 420 300" role="img" aria-label="Two charges +q on the y axis at y=+a and y=-a, point P on the x axis at distance x">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+  <g style="color:var(--text)" stroke="currentColor" fill="none" stroke-width="1.4">
+    <line x1="30" y1="150" x2="390" y2="150" marker-end="url(#ah)"/>
+    <line x1="110" y1="280" x2="110" y2="20" marker-end="url(#ah)"/>
+  </g>
+  <g stroke="var(--text-2)" stroke-dasharray="2 4" stroke-width="1.4" fill="none">
+    <line x1="110" y1="70" x2="300" y2="150"/>
+    <line x1="110" y1="230" x2="300" y2="150"/>
+  </g>
+  <g style="color:var(--text-2)" stroke="currentColor" stroke-width="1" fill="none">
+    <line x1="114" y1="175" x2="296" y2="175" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  </g>
+  <circle cx="110" cy="70" r="8" fill="var(--surface-alt)" stroke="var(--charge)" stroke-width="2"/>
+  <circle cx="110" cy="230" r="8" fill="var(--surface-alt)" stroke="var(--charge)" stroke-width="2"/>
+  <circle cx="300" cy="150" r="5" fill="var(--text)"/>
+  <g fill="var(--text)" font-family="Georgia,serif" font-style="italic" font-size="17">
+    <text x="62" y="76">+q</text><text x="62" y="236">+q</text>
+    <text x="126" y="62">y = +a</text><text x="126" y="252">y = −a</text>
+    <text x="294" y="134">P</text><text x="200" y="196">x</text>
+    <text x="398" y="156">x</text><text x="104" y="16">y</text>
+  </g>
+</svg>`
+};
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d=""){ try{ const v = localStorage.getItem(k); return v===null ? d : v; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+};
+const settings = () => ({
+  key: store.get("pt_key"),
+  model: store.get("pt_model","claude-sonnet-5-5"),
+  email: store.get("pt_email"),
+  name: store.get("pt_name","Mokgadi")
+});
+const totalMarks = () => TEST.questions.reduce((s,q)=>s+q.marks,0);
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function renderMath(el){
+  if (window.renderMathInElement) renderMathInElement(el,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});
+  else setTimeout(()=>renderMath(el),200);
+}
+function show(id){
+  ["s-start","s-test","s-upload","s-marking","s-results"].forEach(s=>$(s).classList.toggle("hidden", s!==id));
+  window.scrollTo(0,0);
+}
+
+/* ---------- start screen ---------- */
+$("testTitle").textContent = TEST.title;
+$("startInfo").innerHTML = `${TEST.questions.length} question${TEST.questions.length>1?"s":""} · ${totalMarks()} marks · ${TEST.minutes} minutes`;
+function refreshStart(){
+  $("keyMissing").classList.toggle("hidden", !!settings().key);
+  const last = store.get("pt_last_"+TEST.id);
+  if (last){
+    try{
+      const r = JSON.parse(last);
+      $("lastResult").innerHTML = `<h3 style="margin-top:0">Your last attempt</h3><div class="sub">${esc(r.when)} — ${r.total} / ${r.max}</div>`;
+      $("lastResult").classList.remove("hidden");
+    }catch(e){}
+  }
+}
+refreshStart();
+
+/* ---------- test + timer ---------- */
+let timerId=null, endAt=0, startedAt=0;
+function buildQuestions(){
+  $("questions").innerHTML = TEST.questions.map(q=>`
+    <div class="card">
+      <div class="qhead"><h2>Question ${esc(q.number)}</h2><span class="marks">${q.marks} marks</span></div>
+      <div class="qtext">${q.text}</div>
+      ${q.figure ? `<div class="figure">${FIGURES[q.figure]}</div>` : ""}
+      <div class="task">${q.task}</div>
+    </div>`).join("");
+  renderMath($("questions"));
+}
+function tick(){
+  const left = Math.max(0, Math.round((endAt-Date.now())/1000));
+  const m = Math.floor(left/60), s = left%60;
+  const box = $("timerBox");
+  box.textContent = `${m}:${String(s).padStart(2,"0")}`;
+  box.classList.toggle("low", left>0 && left<=120);
+  box.classList.toggle("up", left===0);
+  if (left===0){
+    clearInterval(timerId); timerId=null;
+    $("timeUp").classList.remove("hidden");
+    goUpload();
+  }
+}
+$("btnStart").onclick = ()=>{
+  if (!settings().key){ $("keyMissing").classList.remove("hidden"); return; }
+  buildQuestions();
+  startedAt = Date.now();
+  endAt = startedAt + TEST.minutes*60000;
+  $("timerBox").classList.remove("hidden");
+  tick(); timerId = setInterval(tick, 1000);
+  show("s-test");
+};
+function goUpload(){ show("s-upload"); }
+$("btnDone").onclick = ()=>{ if (timerId){ clearInterval(timerId); timerId=null; } goUpload(); };
+$("btnBackToQ").onclick = ()=> show("s-test");
+
+/* ---------- photos ---------- */
+let photos = []; // {dataUrl, b64}
+$("btnCamera").onclick = ()=> $("inCamera").click();
+$("btnFiles").onclick = ()=> $("inFiles").click();
+$("inCamera").onchange = e => addFiles(e.target.files);
+$("inFiles").onchange = e => addFiles(e.target.files);
+
+function shrink(file){
+  return new Promise((resolve,reject)=>{
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = ()=>{
+      const max = 1600;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const k = Math.min(1, max/Math.max(w,h));
+      w = Math.round(w*k); h = Math.round(h*k);
+      const c = document.createElement("canvas"); c.width=w; c.height=h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      const dataUrl = c.toDataURL("image/jpeg",0.85);
+      resolve({dataUrl, b64: dataUrl.split(",")[1]});
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error("That file couldn't be opened as a photo.")); };
+    img.src = url;
+  });
+}
+async function addFiles(list){
+  $("uploadErr").classList.add("hidden");
+  for (const f of list){
+    if (photos.length>=6){ showUploadErr("You can upload up to 6 pages."); break; }
+    try{ photos.push(await shrink(f)); }catch(err){ showUploadErr(err.message); }
+  }
+  $("inCamera").value=""; $("inFiles").value="";
+  drawThumbs();
+}
+function showUploadErr(msg){ $("uploadErr").textContent = msg; $("uploadErr").classList.remove("hidden"); }
+function drawThumbs(){
+  $("thumbs").innerHTML = photos.map((p,i)=>`
+    <div class="thumb"><img src="${p.dataUrl}" alt="Page ${i+1}"><button data-i="${i}" aria-label="Remove page ${i+1}">✕</button></div>`).join("");
+  $("thumbs").querySelectorAll("button").forEach(b=> b.onclick = ()=>{ photos.splice(+b.dataset.i,1); drawThumbs(); });
+  $("btnMark").disabled = photos.length===0;
+}
+
+/* ---------- marking with Claude ---------- */
+function buildPrompt(){
+  const qs = TEST.questions.map(q=>`
+QUESTION ${q.number} (${q.marks} marks)
+${q.text}
+Task: ${q.task}
+
+MARK SCHEME — award each criterion 1 mark or 0 marks:
+${q.criteria.map(c=>`- [${c.id}] ${c.text}: ${c.detail}`).join("\n")}
+
+COMMON ERRORS TO WATCH FOR:
+${q.commonErrors.map(e=>"- "+e).join("\n")}
+
+MODEL SOLUTION:
+${q.modelSolution.map((s,i)=>`${i+1}. ${s}`).join("\n")}`).join("\n\n");
+
+  return `You are marking a first-year university physics test written by hand on paper. The photos attached are the student's handwritten working. The student is ${settings().name}, a first-year Construction Studies student who did not take physics at high school, so keep feedback plain, warm and specific.
+
+${qs}
+
+MARKING RULES
+- Mark only what is actually written in the photos. Do not give credit for steps that are not shown.
+- Award method marks even if a later step goes wrong. Allow follow-through: if an earlier slip is carried forward correctly, later method marks can still be awarded.
+- Equivalent correct forms count (e.g. r^2 = x^2 + a^2, or using a labelled angle correctly).
+- This is a "show that" question: the final answer is given, so writing it down alone earns nothing. The working must genuinely lead to it.
+- A clear labelled sketch can earn the symmetry mark on its own.
+- If the handwriting is unclear, say what you think it says and lower your confidence. If a photo is blank, unreadable, or about a different question, say so and set flag_for_tutor to true.
+
+Reply with ONLY a JSON object, no other text, in exactly this shape:
+{
+  "transcription": "a faithful line-by-line copy of what the student wrote, using plain text maths",
+  "results": [
+    {"question": "2", "criteria": [{"id": "c1", "awarded": 1, "comment": "one short sentence on what they did or missed"}], "total": 0}
+  ],
+  "total": 0,
+  "confidence": "high | medium | low",
+  "flag_for_tutor": false,
+  "flag_reason": "",
+  "feedback": "2-4 sentences speaking directly to the student: what went well, the main thing to fix",
+  "next_step": "one specific thing to practise next"
+}`;
+}
+
+async function callClaude(content, maxTokens){
+  const s = settings();
+  const res = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      "x-api-key": s.key,
+      "anthropic-version":"2023-06-01",
+      "anthropic-dangerous-direct-browser-access":"true"
+    },
+    body: JSON.stringify({ model: s.model, max_tokens: maxTokens, messages:[{role:"user", content}] })
+  });
+  const data = await res.json().catch(()=>({}));
+  if (!res.ok){
+    const msg = (data && data.error && data.error.message) || ("HTTP "+res.status);
+    throw new Error(msg);
+  }
+  return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
+}
+
+function parseJSON(text){
+  const a = text.indexOf("{"), b = text.lastIndexOf("}");
+  if (a<0 || b<0) throw new Error("The marker's reply couldn't be read.");
+  return JSON.parse(text.slice(a,b+1));
+}
+
+$("btnMark").onclick = async ()=>{
+  show("s-marking");
+  const content = [
+    ...photos.map((p,i)=>[
+      {type:"text", text:`Page ${i+1} of the student's working:`},
+      {type:"image", source:{type:"base64", media_type:"image/jpeg", data:p.b64}}
+    ]).flat(),
+    {type:"text", text: buildPrompt()}
+  ];
+  try{
+    let out;
+    try{ out = parseJSON(await callClaude(content, 3000)); }
+    catch(e){ if (/couldn't be read|JSON/i.test(e.message)) out = parseJSON(await callClaude(content, 3000)); else throw e; }
+    showResults(out);
+  }catch(err){
+    show("s-upload");
+    showUploadErr("Marking didn't work: " + err.message + " — check your internet and try again. If it keeps failing, send the photos to your tutor.");
+  }
+};
+
+/* ---------- results ---------- */
+let lastReport = "";
+function showResults(r){
+  const max = totalMarks();
+  const total = Math.max(0, Math.min(max, Number(r.total)||0));
+  const mins = Math.round((Date.now()-startedAt)/60000);
+  const when = new Date().toLocaleString();
+  store.set("pt_last_"+TEST.id, JSON.stringify({when,total,max}));
+
+  let html = `<div class="card"><div class="score"><div class="big">${total}<span style="font-size:22px;color:var(--text-3)"> / ${max}</span></div>
+    <div><div style="font-weight:600">${esc(TEST.title)}</div><div class="sub">Time used: about ${mins} min</div></div></div>`;
+  if (r.flag_for_tutor || r.confidence==="low"){
+    html += `<div class="banner warn">Your tutor will double-check this mark${r.flag_reason? ": "+esc(r.flag_reason):"."}</div>`;
+  }
+  html += `<p style="margin-bottom:0">${esc(r.feedback||"")}</p>`;
+  if (r.next_step) html += `<div class="task"><b>Practise next:</b> ${esc(r.next_step)}</div>`;
+  html += `</div>`;
+
+  const report = [`${settings().name} — ${TEST.title}`, `Score: ${total} / ${max}`, `Date: ${when}`, `Time used: ~${mins} min`, `Marker confidence: ${r.confidence||"?"}`];
+  if (r.flag_for_tutor) report.push(`FLAGGED: ${r.flag_reason||"check this mark"}`);
+
+  TEST.questions.forEach(q=>{
+    const qr = (r.results||[]).find(x=>String(x.question)===String(q.number)) || {criteria:[]};
+    html += `<div class="card"><div class="qhead"><h2>Question ${esc(q.number)}</h2><span class="marks">${qr.total ?? "?"} / ${q.marks}</span></div>`;
+    report.push("", `Question ${q.number}: ${qr.total ?? "?"} / ${q.marks}`);
+    q.criteria.forEach(c=>{
+      const got = (qr.criteria||[]).find(x=>x.id===c.id) || {awarded:0, comment:"Not found in your working."};
+      const ok = Number(got.awarded)>0;
+      html += `<div class="crit"><div class="tick ${ok?"y":"n"}">${ok?"✓":"✗"}</div>
+        <div><div class="what">${esc(c.text)}</div><div class="why">${esc(got.comment||"")}</div></div></div>`;
+      report.push(`  ${ok?"[✓]":"[✗]"} ${c.text} — ${got.comment||""}`);
+    });
+    html += `<details><summary>See the model solution</summary><ol class="steps">${q.modelSolution.map(s=>`<li>${s}</li>`).join("")}</ol></details>`;
+    html += `</div>`;
+  });
+
+  html += `<div class="card"><details><summary>What the marker read from your photos</summary><pre class="read">${esc(r.transcription||"")}</pre></details>
+    <p class="small" style="margin-bottom:0">If something here was misread, tell your tutor — the mark can be changed.</p></div>`;
+
+  report.push("", "Feedback: " + (r.feedback||""), "Practise next: " + (r.next_step||""), "", "What the marker read:", r.transcription||"");
+  lastReport = report.join("\n");
+
+  $("results").innerHTML = html;
+  renderMath($("results"));
+  $("sendNote").textContent = settings().email ? "" : "No tutor email set — use Copy results and send it to your tutor.";
+  $("timerBox").classList.add("hidden");
+  show("s-results");
+}
+
+$("btnSend").onclick = ()=>{
+  const s = settings();
+  const subject = `${s.name} — ${TEST.title} — results`;
+  window.location.href = `mailto:${encodeURIComponent(s.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lastReport)}`;
+  $("sendNote").textContent = "Your email app should open with the results filled in. Press send there.";
+};
+$("btnCopy").onclick = async ()=>{
+  try{ await navigator.clipboard.writeText(lastReport); $("sendNote").textContent="Copied. Paste it into WhatsApp or email to your tutor."; }
+  catch(e){ $("sendNote").textContent="Couldn't copy automatically — select the text and copy it."; }
+};
+$("btnRestart").onclick = ()=>{
+  photos=[]; drawThumbs(); $("timeUp").classList.add("hidden"); $("uploadErr").classList.add("hidden");
+  $("timerBox").classList.add("hidden"); refreshStart(); show("s-start");
+};
+
+/* ---------- settings ---------- */
+$("btnSettings").onclick = ()=>{
+  const s = settings();
+  $("setKey").value = s.key; $("setModel").value = s.model; $("setEmail").value = s.email; $("setName").value = s.name;
+  $("setMsg").textContent = ""; $("dlg").classList.remove("hidden");
+};
+$("btnCloseSet").onclick = ()=> $("dlg").classList.add("hidden");
+$("btnSaveSet").onclick = ()=>{
+  store.set("pt_key", $("setKey").value.trim());
+  store.set("pt_model", $("setModel").value);
+  store.set("pt_email", $("setEmail").value.trim());
+  store.set("pt_name", $("setName").value.trim() || "Mokgadi");
+  $("setMsg").textContent = "Saved on this device.";
+  refreshStart();
+};
+$("btnTestKey").onclick = async ()=>{
+  store.set("pt_key", $("setKey").value.trim()); store.set("pt_model", $("setModel").value);
+  $("setMsg").textContent = "Testing…";
+  try{ await callClaude([{type:"text",text:"Reply with the single word OK."}], 10); $("setMsg").textContent = "The key works. The marker is ready."; }
+  catch(e){ $("setMsg").textContent = "That didn't work: " + e.message; }
+};
+</script>
+</body>
+</html>
